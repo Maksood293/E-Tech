@@ -16,7 +16,7 @@ function App() {
             </Link>
           </div>
           <div>
-            <Link href="/Cart">
+            <Link to="/cart">
               Cart
               {cartItems.length > 0 && (
                 <span className="badge">{cartItems.length}</span>
@@ -26,8 +26,8 @@ function App() {
           </div>
         </header>
         <main>
-          <Route path="/product/:id?" exact component={ProductScreen}></Route>
-          <Route path="/cart/:id" exact component={CartScreen}></Route>
+          <Route path="/product/:id" exact component={ProductScreen}></Route>
+          <Route path="/cart/:id?" exact component={CartScreen}></Route>
           <Route path="/" exact component={HomeScreen}></Route>
         </main>
         <footer className="row center">All right reserved</footer>

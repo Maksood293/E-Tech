@@ -1,8 +1,9 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import data from "../data.js";
+import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
-
+import { generateToken } from "../utils.js";
 const userRouter = express.Router();
 
 userRouter.get(
@@ -14,4 +15,25 @@ userRouter.get(
   })
 );
 
+//user singin router start
+userRouter.post(
+  "/singin",
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      if (bcrypt.compareSync(req.body.password, user.password)) {
+        res.send({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          token: generateToken(user), //to generateToken using user details
+        });
+        return;
+      }
+    }
+    res.status(401).send({ message: "Invalid username or password" });
+  })
+);
+//end
 export default userRouter;

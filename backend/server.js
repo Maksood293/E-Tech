@@ -1,10 +1,20 @@
 import express from "express";
 import mongoose from "mongoose";
 // import data from "./data.js";
+import dotenv from "dotenv";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 
+dotenv.config(); //to use env file we need to config in backend
+
 const app = express();
+
+// start to give permissions to users to send post requests
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+//end
+
+//connect mongodb start
 mongoose
   .connect(process.env.MONGODB_URL || "mongodb://localhost/e-tech", {
     useNewUrlParser: true,
@@ -13,7 +23,9 @@ mongoose
   })
   .then(() => console.log("Database connected!"))
   .catch((err) => console.log(err));
+//monodb end
 
+//first created server
 app.get("/", (req, res) => {
   res.send("Server is ready");
 });

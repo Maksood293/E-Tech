@@ -5,6 +5,7 @@ import CartScreen from "./screens/CartScreen";
 import { useDispatch, useSelector } from "react-redux";
 import SigninScreen from "./screens/SigninScreen";
 import { singout } from "./actions/userActions";
+import RegisterScreen from "./screens/RegisterScreen";
 function App() {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
@@ -38,7 +39,7 @@ function App() {
                   {"  "}
                 </Link>
                 <ul className="dropdown-content">
-                  <Link to="#singout" onClick={singoutHandler}>
+                  <Link to="/signin" onClick={singoutHandler}>
                     Sing Out
                   </Link>
                 </ul>
@@ -52,6 +53,7 @@ function App() {
           <Route path="/product/:id" exact component={ProductScreen}></Route>
           <Route path="/cart/:id?" exact component={CartScreen}></Route>
           <Route path="/signin" component={SigninScreen}></Route>
+          <Route path="/register" component={RegisterScreen}></Route>
 
           <Route path="/" exact component={HomeScreen}></Route>
         </main>

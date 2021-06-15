@@ -8,6 +8,7 @@ import { singout } from "./actions/userActions";
 import RegisterScreen from "./screens/RegisterScreen";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import PaytmentMethodeScreen from "./screens/PaytmentMethodeScreen";
+import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 function App() {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
@@ -58,6 +59,7 @@ function App() {
           <Route path="/register" component={RegisterScreen}></Route>
           <Route path="/shipping" component={ShippingAddressScreen}></Route>
           <Route path="/payment" component={PaytmentMethodeScreen}></Route>
+          <Route path="/placeorder" component={PlaceOrderScreen}></Route>
 
           <Route path="/" exact component={HomeScreen}></Route>
         </main>

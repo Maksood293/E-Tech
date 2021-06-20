@@ -52,6 +52,8 @@ export const singin = (email, password) => async (dispatch) => {
 export const singout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   localStorage.removeItem("cartItems");
+  localStorage.removeItem("shippingAddress");
+
   dispatch({ type: USER_SINGOUT });
   window.location.reload();
 };

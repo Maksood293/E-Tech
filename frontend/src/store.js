@@ -20,6 +20,7 @@ const initailState = {
     shippingAddress: localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
       : {},
+    paymentMethod: "Paypal",
   },
 };
 

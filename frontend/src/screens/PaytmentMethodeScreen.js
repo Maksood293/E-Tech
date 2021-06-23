@@ -30,7 +30,6 @@ function PaytmentMethodeScreen(props) {
               name="paymentMethode"
               id="paypal"
               required
-              checked
               value="Paypal"
               onChange={(e) => setPaymentMethode(e.target.value)}
             />

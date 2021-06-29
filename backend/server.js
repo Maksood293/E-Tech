@@ -37,6 +37,9 @@ app.use("/api/orders", orderRouter); //order router api
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
+app.get("/api/config/paypal", (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID || "sb"); //api for PayPal sandbox id
+});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

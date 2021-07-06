@@ -3,14 +3,21 @@ import { PayPalButton } from "react-paypal-button-v2";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { detailsOrder } from "../actions/orderAction";
+import { detailsOrder, payOrder } from "../actions/orderAction";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
+import { ORDER_PAY_RESET } from "../constants/orderConstant";
 export default function OrderScreen(props) {
   const orderId = props.match.params.id;
   const [sdkReady, setsdkReady] = useState(false);
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
+  const orderPay = useSelector((state) => state.orderPay);
+  const {
+    error: errorPay,
+    loading: loadingPay,
+    success: successPay,
+  } = orderPay;
   const dispatch = useDispatch();
   useEffect(() => {
     const addPaypayScript = async () => {
@@ -26,7 +33,8 @@ export default function OrderScreen(props) {
       document.body.appendChild(script);
     };
 
-    if (!order) {
+    if (!order || successPay || (order && order._id !== orderId)) {
+      dispatch({ type: ORDER_PAY_RESET });
       dispatch(detailsOrder(orderId));
     } else {
       if (!order.isPaid) {
@@ -37,11 +45,19 @@ export default function OrderScreen(props) {
         }
       }
     }
-  }, [dispatch, orderId, order, sdkReady]);
+  }, [dispatch, orderId, order, successPay, sdkReady]);
 
   const onSuccessHandler = () => {
-    //Todo
+    //Todo Remove paymentResult from and pass it as a parameter when the app is deploye
+    const paymentResult = {
+      id: "70e1c48d6f1868117e574d34",
+      status: "COMPLETED",
+      update_time: "2021-10-06T10:34:45Z",
+      email_address: "maksood@gmail.com",
+    };
+    dispatch(payOrder(order, paymentResult));
   };
+
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : error ? (
@@ -156,10 +172,17 @@ export default function OrderScreen(props) {
                   {!sdkReady ? (
                     <LoadingBox></LoadingBox>
                   ) : (
-                    <PayPalButton
-                      amount={order.totalPrice}
-                      onSuccess={onSuccessHandler}
-                    ></PayPalButton>
+                    <>
+                      {errorPay && (
+                        <MessageBox variant="danger">{errorPay}</MessageBox>
+                      )}
+                      {loadingPay && <LoadingBox></LoadingBox>}
+                      <PayPalButton
+                        amount={order.totalPrice}
+                        // onSuccess={onSuccessHandler}
+                        onClick={onSuccessHandler} //Remove onClick before deploye the App and uncomment the above code
+                      ></PayPalButton>
+                    </>
                   )}
                 </li>
               )}

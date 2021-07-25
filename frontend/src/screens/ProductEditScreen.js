@@ -148,6 +148,10 @@ function ProductEditScreen(props) {
                 label="Choose Image"
                 onChange={uploadFileHandler}
               ></input>
+              {loadingUpload && <LoadingBox></LoadingBox>}
+              {errorUpload && (
+                <MessageBox variant="danger">{errorUpload}</MessageBox>
+              )}
             </div>
             <div>
               <label htmlFor="category">Category</label>

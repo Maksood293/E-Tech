@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { detailsProduct } from "../actions/productAction";
+import { detailsProduct, updateProduct } from "../actions/productAction";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
+import { PRODUCT_UPDATE_RESET } from "../constants/productConstants";
 
 function ProductEditScreen(props) {
   const productId = props.match.params.id;
@@ -14,12 +15,22 @@ function ProductEditScreen(props) {
   const [brand, setBrand] = useState("");
   const [description, setDescription] = useState("");
   const productDetails = useSelector((state) => state.productDetails);
-
+  const productUpdate = useSelector((state) => state.productUpdate);
+  const {
+    error: updateError,
+    loading: updateLoading,
+    success: updateSuccess,
+    message,
+  } = productUpdate;
   const { error, loading, product } = productDetails;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!product || product._id !== productId) {
+    if (updateSuccess) {
+      props.history.push("/productlist");
+    }
+    if (!product || product._id !== productId || updateSuccess) {
+      dispatch({ type: PRODUCT_UPDATE_RESET });
       dispatch(detailsProduct(productId));
     } else {
       setName(product.name);
@@ -30,9 +41,21 @@ function ProductEditScreen(props) {
       setBrand(product.brand);
       setDescription(product.description);
     }
-  }, [product, dispatch, productId]);
-  const submitHandler = () => {
-    //TODO
+  }, [product, dispatch, productId, props.history, updateSuccess]);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(
+      updateProduct({
+        _id: productId,
+        name,
+        price,
+        image,
+        category,
+        countInStock,
+        brand,
+        description,
+      })
+    );
   };
 
   const isSubmitDisable =
@@ -49,6 +72,11 @@ function ProductEditScreen(props) {
         <div>
           <h1>Edit Product {productId}</h1>
         </div>
+        {updateLoading && <LoadingBox></LoadingBox>}
+        {updateError && <MessageBox variant="danger">{updateError}</MessageBox>}
+        {updateSuccess && message && (
+          <MessageBox variant="success">{message}</MessageBox>
+        )}
         {loading ? (
           <LoadingBox></LoadingBox>
         ) : error ? (

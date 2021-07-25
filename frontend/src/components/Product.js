@@ -13,7 +13,7 @@ function Product({ product }) {
           <h2>{product.name}</h2>
         </Link>
         <Rating rating={product.rating} numReviews={product.numReviews} />
-        <div className="price">$120</div>
+        <div className="price">${product.price}</div>
       </div>
     </div>
   );

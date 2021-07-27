@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 import orderRouter from "./routers/orderRouter.js";
+import uploadRouter from "./routers/uploadRouter.js";
+import path from "path";
 
 dotenv.config(); //to use env file we need to config in backend
 
@@ -31,12 +33,17 @@ app.get("/", (req, res) => {
   res.send("Server is ready");
 });
 
+app.use("/api/uploads", uploadRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter); //order router api
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
+
+const __dirname = path.resolve(); //for that two lines of code resolve the image path so we can see image on frontend side successfully
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
 app.get("/api/config/paypal", (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || "sb"); //api for PayPal sandbox id
 });

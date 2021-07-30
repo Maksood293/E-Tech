@@ -1,9 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createdProduct, listProducts } from "../actions/productAction";
+import {
+  createdProduct,
+  deleteProduct,
+  listProducts,
+} from "../actions/productAction";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
+import {
+  PRODUCT_CREATE_RESET,
+  PRODUCT_DELETE_RESET,
+} from "../constants/productConstants";
 export default function ProductListScreen(props) {
   const productList = useSelector((state) => state.productList);
   const { loading, error, products } = productList;
@@ -14,17 +21,28 @@ export default function ProductListScreen(props) {
     success: successCreated,
     product,
   } = productCreate;
+  const productDelete = useSelector((state) => state.productDelete);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = productDelete;
   const dispatch = useDispatch();
   useEffect(() => {
     if (successCreated) {
       dispatch({ type: PRODUCT_CREATE_RESET });
       props.history.push(`/product/${product._id}/edit`);
     }
+    if (successDelete) {
+      dispatch({ type: PRODUCT_DELETE_RESET });
+    }
     dispatch(listProducts());
-  }, [dispatch, successCreated, props.history, product]);
+  }, [dispatch, successCreated, props.history, product, successDelete]);
 
-  const deleteHandler = () => {
-    //TODO
+  const deleteHandler = (productId) => {
+    if (window.confirm("Are you sure to delete?")) {
+      dispatch(deleteProduct(productId));
+    }
   };
   const createHandler = () => {
     dispatch(createdProduct());
@@ -86,7 +104,7 @@ export default function ProductListScreen(props) {
                   <button
                     type="button"
                     className="small"
-                    onClick={() => deleteHandler(product)}
+                    onClick={() => deleteHandler(product._id)}
                   >
                     Delete
                   </button>

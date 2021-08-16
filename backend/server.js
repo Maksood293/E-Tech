@@ -29,11 +29,15 @@ mongoose
 //monodb end
 
 //first created server
-app.get("/", (req, res) => {
-  res.send("Server is ready");
-});
+// app.get("/", (req, res) => {
+//   res.send("Server is ready");
+// });
 
 app.use("/api/uploads", uploadRouter);
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) =>
+  res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
+);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter); //order router api

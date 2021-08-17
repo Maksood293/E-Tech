@@ -32,7 +32,7 @@ mongoose
 // app.get("/", (req, res) => {
 //   res.send("Server is ready");
 // });
-
+const __dirname = path.resolve();
 app.use("/api/uploads", uploadRouter);
 app.use(express.static(path.join(__dirname, "/frontend/build")));
 app.get("*", (req, res) =>
@@ -45,7 +45,7 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-const __dirname = path.resolve(); //for that two lines of code resolve the image path so we can see image on frontend side successfully
+//for that two lines of code resolve the image path so we can see image on frontend side successfully
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.get("/api/config/paypal", (req, res) => {

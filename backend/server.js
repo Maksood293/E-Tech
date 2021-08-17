@@ -34,17 +34,16 @@ mongoose
 // });
 const __dirname = path.resolve();
 app.use("/api/uploads", uploadRouter);
-app.use(express.static(path.join(__dirname, "/frontend/build")));
-app.get("*", (req, res) =>
-  res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
-);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter); //order router api
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
-
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) =>
+  res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
+);
 //for that two lines of code resolve the image path so we can see image on frontend side successfully
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 

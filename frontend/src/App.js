@@ -32,7 +32,7 @@ function App() {
         <header className="row">
           <div>
             <Link to="/" className="brand">
-              E-Tech
+              E-Comm
             </Link>
           </div>
           <div>

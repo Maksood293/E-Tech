@@ -64,14 +64,14 @@ export default function OrderScreen(props) {
     }
   }, [dispatch, orderId, order, successPay, sdkReady, successDeliver]);
 
-  const onSuccessHandler = (paymentResult) => {
+  const onSuccessHandler = () => {
     //Todo Remove paymentResult from and pass it as a parameter when the app is deploye
-    // const paymentResult = {
-    //   id: "70e1c48d6f1868117e574d34",
-    //   status: "COMPLETED",
-    //   update_time: "2021-10-06T10:34:45Z",
-    //   email_address: "maksood@gmail.com",
-    // };
+    const paymentResult = {
+      id: "70e1c48d6f1868117e574d34",
+      status: "COMPLETED",
+      update_time: "2021-10-06T10:34:45Z",
+      email_address: "maksood@gmail.com",
+    };
     dispatch(payOrder(order, paymentResult));
   };
   const deliverHandler = () => {
@@ -199,8 +199,8 @@ export default function OrderScreen(props) {
                       {loadingPay && <LoadingBox></LoadingBox>}
                       <PayPalButton
                         amount={order.totalPrice}
-                        onSuccess={onSuccessHandler}
-                        // onClick={onSuccessHandler} //Remove onClick before deploye the App and uncomment the above code
+                        // onSuccess={onSuccessHandler}
+                        onClick={onSuccessHandler} //Remove onClick before deploye the App and uncomment the above code
                       ></PayPalButton>
                     </>
                   )}

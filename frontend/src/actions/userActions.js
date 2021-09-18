@@ -13,6 +13,12 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_SUCCESS,
+  USER_LIST_REQUEST,
+  USER_LIST_FAIL,
+  USER_LIST_SUCCESS,
+  USER_DELETE_REQUEST,
+  USER_DELETE_FAIL,
+  USER_DELETE_SUCCESS,
 } from "../constants/userConstants";
 
 //usre register action start
@@ -102,4 +108,42 @@ export const singout = () => (dispatch) => {
 
   dispatch({ type: USER_SINGOUT });
   window.location.reload();
+};
+
+export const listUsers = () => async (dispatch, getState) => {
+  dispatch({ type: USER_LIST_REQUEST });
+  try {
+    const { userSingin } = getState();
+    const { data } = await axios.get("/api/users", {
+      headers: { Authorization: `Bearer ${userSingin.userInfo.token}` },
+    });
+    dispatch({ type: USER_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const deleteUser = (userId) => async (dispatch, getState) => {
+  dispatch({ type: USER_DELETE_REQUEST, payload: userId });
+  try {
+    const { userSingin } = getState();
+    const { data } = await axios.delete(`/api/users/${userId}`, {
+      headers: { Authorization: `Bearer ${userSingin.userInfo.token}` },
+    });
+
+    dispatch({ type: USER_DELETE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
 };

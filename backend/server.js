@@ -29,10 +29,10 @@ mongoose
 //monodb end
 
 //first created server
-app.get("/", (req, res) => {
-  res.send("Server is ready");
-});
-
+// app.get("/", (req, res) => {
+//   res.send("Server is ready");
+// });
+const __dirname = path.resolve();
 app.use("/api/uploads", uploadRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
@@ -41,13 +41,16 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-const __dirname = path.resolve(); //for that two lines of code resolve the image path so we can see image on frontend side successfully
+//for that two lines of code resolve the image path so we can see image on frontend side successfully
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
-
 app.get("/api/config/paypal", (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || "sb"); //api for PayPal sandbox id
 });
 
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) =>
+  res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
+);
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server at http://localhost:${port}`);

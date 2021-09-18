@@ -17,6 +17,8 @@ import AdminRoute from "./components/AdminRoute";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import UserScreen from "./screens/UserScreen";
+import UserEditScreen from "./screens/UserEditScreen";
 function App() {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
@@ -32,7 +34,7 @@ function App() {
         <header className="row">
           <div>
             <Link to="/" className="brand">
-              E-Tech
+              E-Comm
             </Link>
           </div>
           <div>
@@ -109,9 +111,14 @@ function App() {
             path="/productlist"
             component={ProductListScreen}
           ></AdminRoute>
+          <AdminRoute path="/userlist" component={UserScreen}></AdminRoute>
           <AdminRoute
             path="/orderlist"
             component={OrderListScreen}
+          ></AdminRoute>
+          <AdminRoute
+            path="/user/:id/edit"
+            component={UserEditScreen}
           ></AdminRoute>
           <Route path="/placeorder" component={PlaceOrderScreen}></Route>
           <Route path="/order/:id" component={OrderScreen}></Route>
